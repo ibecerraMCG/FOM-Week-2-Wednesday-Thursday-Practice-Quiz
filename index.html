@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 2 Wednesday and Thursday Practice Quiz</title>
+    <style>
+        /* --- Color Variables --- */
+        :root {
+            /* Default: Dark Theme */
+            --bg-color: #2d343e; /* Dark background */
+            --container-bg: #3c424f; /* Slightly lighter container */
+            --text-color: #e8e6e3; /* Light text */
+            --question-text-color: #8ab4f8; /* Light blue for questions */
+            --lo-text-color: #b0c4de; /* Lighter blue for learning objective */
+            --border-color: #555; /* Darker borders */
+            --separator-color: #4a4f5a;
+            --label-bg: #454c5a;
+            --label-border: #6c757d;
+            --label-hover-bg: #525966;
+            --label-hover-border: #7a828a;
+            --button-bg: #8ab4f8;
+            --button-text: #202124;
+            --button-hover-bg: #a3c5f9;
+            --button-disabled-bg: #5f6368;
+            --feedback-correct-bg: #344e41;
+            --feedback-correct-text: #c7f9cc;
+            --feedback-correct-border: #52b788;
+            --feedback-incorrect-bg: #5e2129;
+            --feedback-incorrect-text: #f8d7da;
+            --feedback-incorrect-border: #a4133c;
+            --feedback-rationale-text: #adb5bd; /* Lighter gray for rationale */
+            --feedback-source-text: #c7d3e0;
+            --feedback-separator: #6c757d;
+            --radio-accent: #8ab4f8;
+        }
+
+        .light-theme {
+            --bg-color: #eef2f7;
+            --container-bg: #ffffff;
+            --text-color: #343a40;
+            --question-text-color: #0056b3;
+            --lo-text-color: #5a6e8a;
+            --border-color: #dee2e6;
+            --separator-color: #e9ecef;
+            --label-bg: #f8f9fa;
+            --label-border: #ced4da;
+            --label-hover-bg: #e2e6ea;
+            --label-hover-border: #adb5bd;
+            --button-bg: #007bff;
+            --button-text: white;
+            --button-hover-bg: #0056b3;
+            --button-disabled-bg: #6c757d;
+            --feedback-correct-bg: #d1e7dd;
+            --feedback-correct-text: #0f5132;
+            --feedback-correct-border: #badbcc;
+            --feedback-incorrect-bg: #f8d7da;
+            --feedback-incorrect-text: #842029;
+            --feedback-incorrect-border: #f5c2c7;
+            --feedback-rationale-text: #495057;
+            --feedback-source-text: #343a40;
+            --feedback-separator: #ccc;
+            --radio-accent: #007bff;
+        }
+
+        /* --- General Styles --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 40px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #theme-toggle-button {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 8px 12px;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: 1px solid var(--label-border);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            z-index: 1000;
+             transition: background-color 0.3s, color 0.3s;
+        }
+         #theme-toggle-button:hover {
+             opacity: 0.8;
+         }
+
+
+        #quiz-container {
+            max-width: 900px;
+            margin: 80px auto 30px auto;
+            background: var(--container-bg);
+            padding: 25px 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .question-block {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--separator-color);
+            transition: border-color 0.3s;
+        }
+
+        .question-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 5px;
+        }
+        
+        .learning-objective {
+            font-size: 0.85em;
+            font-style: italic;
+            color: var(--lo-text-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--separator-color);
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 18px;
+            color: var(--question-text-color);
+            transition: color 0.3s;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 12px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid var(--label-border);
+            background-color: var(--label-bg);
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+
+        .options label:hover {
+            background-color: var(--label-hover-bg);
+            border-color: var(--label-hover-border);
+        }
+
+        .options input[type="radio"]:checked+span {
+             font-weight: bold;
+             color: var(--question-text-color);
+        }
+        .options input[type="radio"] {
+            margin-right: 12px;
+            accent-color: var(--radio-accent);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .check-button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+        }
+
+        .check-button:hover {
+            opacity: 0.85;
+        }
+
+         .check-button:disabled {
+             background-color: var(--button-disabled-bg);
+             cursor: not-allowed;
+             opacity: 0.7;
+         }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            display: none;
+            border: 1px solid transparent;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        .feedback.correct {
+            background-color: var(--feedback-correct-bg);
+            color: var(--feedback-correct-text);
+            border-color: var(--feedback-correct-border);
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: var(--feedback-incorrect-bg);
+            color: var(--feedback-incorrect-text);
+            border-color: var(--feedback-incorrect-border);
+            display: block;
+        }
+
+        .feedback-status {
+             font-weight: bold;
+             font-size: 1.1em;
+             display: block;
+             margin-bottom: 8px;
+        }
+
+        .feedback-rationale {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--feedback-separator);
+            font-size: 0.9em;
+            color: var(--feedback-rationale-text);
+            transition: color 0.3s, border-color 0.3s;
+        }
+        
+        .feedback-source {
+            margin-top: 10px;
+            font-size: 0.85em;
+            font-style: italic;
+            color: var(--feedback-source-text);
+            background-color: rgba(0,0,0,0.1);
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--question-text-color);
+            margin-top: 30px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle-button">Toggle Theme</button>
+    <h1>Week 2 Wednesday and Thursday Practice Quiz</h1>
+
+    <div id="quiz-container">
+        <!-- Questions will be loaded here by JavaScript -->
+    </div>
+
+    <script>
+        const quizData = [
+            // Cell Signaling Questions
+            {
+                learningObjective: "LO1 (Cell Signaling): Describe the central components and properties of G-protein coupled receptor signaling pathways.",
+                question: "Activation of a G protein-coupled receptor (GPCR) by an agonist leads to a conformational change that allows it to function as a guanine nucleotide exchange factor (GEF). This GEF activity is directed towards which of the following molecules?",
+                options: { A: "The Gα subunit of the heterotrimeric G protein", B: "The Gβγ subunit complex", C: "An adjacent receptor tyrosine kinase", D: "A downstream effector like adenylyl cyclase", E: "The receptor itself (autophosphorylation)" },
+                correctAnswer: "A",
+                rationale: "Upon agonist binding, the activated GPCR interacts with a heterotrimeric G protein. This interaction causes the Gα subunit to release its bound GDP and bind a new molecule of GTP. This exchange of GDP for GTP is the definition of GEF activity, which switches the Gα subunit to its 'ON' state.",
+                source: "Source (Cell Signaling, Slide 7): The 'G-Proteins and the GTPase Cycle' diagram shows the Guanine Nucleotide Exchange Factor (GEF) acting on the G protein to facilitate the switch from a GDP-bound 'OFF' state to a GTP-bound 'ON' state."
+            },
+            {
+                learningObjective: "LO1 (Cell Signaling): Describe the central components and properties of G-protein coupled receptor signaling pathways.",
+                question: "To terminate a G protein signal, the Gα subunit must hydrolyze its bound GTP to GDP. This intrinsic GTPase activity is often slow. The rate of this inactivation step is dramatically increased by which class of proteins?",
+                options: { A: "Guanine nucleotide exchange factors (GEFs)", B: "GTPase-activating proteins (GAPs)", C: "G protein-coupled receptor kinases (GRKs)", D: "Phosphodiesterases (PDEs)", E: "Protein Kinase A (PKA)" },
+                correctAnswer: "B",
+                rationale: "GTPase-activating proteins (GAPs), such as Regulators of G protein Signaling (RGS proteins), act as the 'brakes' for the system. They bind to the active, GTP-bound Gα subunit and accelerate its intrinsic GTPase activity, leading to the rapid hydrolysis of GTP to GDP and returning the G protein to its inactive state.",
+                source: "Source (Cell Signaling, Slide 8): The diagram shows 'RGS proteins (GAP)' accelerating the conversion of the active Gα-GTP back to the inactive Gα-GDP."
+            },
+            {
+                learningObjective: "LO1 (Cell Signaling): Describe the central components and properties of G-protein coupled receptor signaling pathways.",
+                question: "Chronic stimulation of a GPCR often leads to desensitization, a process that reduces the cell's responsiveness. The initial step in this process involves the phosphorylation of the activated receptor by a specific kinase, which then promotes the binding of another protein. Which protein binds to the phosphorylated GPCR to uncouple it from G proteins and promote its internalization?",
+                options: { A: "Gαs", B: "Gβγ", C: "Arrestin", D: "Calmodulin", E: "Protein Kinase C (PKC)" },
+                correctAnswer: "C",
+                rationale: "Following agonist-induced activation and phosphorylation by a G protein-coupled receptor kinase (GRK), Arrestin is recruited from the cytosol to the GPCR. Arrestin binding sterically hinders the receptor's interaction with G proteins, effectively uncoupling it from downstream signaling. Arrestin also acts as an adapter to link the receptor to clathrin, facilitating its endocytosis.",
+                source: "Source (Cell Signaling, Slide 11): The 'Desensitization and downregulation of GPCR pathways' diagram clearly shows GRK phosphorylating the receptor, followed by the binding of 'Arrestin', which leads to uncoupling and subsequent internalization."
+            },
+            {
+                learningObjective: "LO2 (Cell Signaling): Explain how G-protein signaling pathways are involved the regulation of smooth muscle tone, photoreception in the retina, and in symptoms associated with cholera.",
+                question: "The toxin produced by Vibrio cholerae causes profuse watery diarrhea by irreversibly activating a specific G protein in intestinal epithelial cells. The toxin does this by ADP-ribosylating the Gα subunit, locking it in a GTP-bound state. Which Gα subunit is the target of cholera toxin?",
+                options: { A: "Gαq", B: "Gαi", C: "Gαs", D: "Gαt (transducin)", E: "Gα12/13" },
+                correctAnswer: "C",
+                rationale: "Cholera toxin specifically targets Gαs. The constitutive activation of Gαs leads to the persistent activation of adenylyl cyclase, resulting in extremely high levels of intracellular cAMP. In intestinal epithelial cells, high cAMP activates PKA, which phosphorylates and opens the CFTR chloride channel, leading to massive secretion of Cl-, Na+, and water into the intestinal lumen.",
+                source: "Source (Cell Signaling, Slide 19): The diagram 'ADP-ribosylation of Gas and Gai Increases cAMP Levels' shows Cholera Toxin (CT) acting on the Gsα subunit, causing 'Activation of E' (adenylyl cyclase)."
+            },
+            {
+                learningObjective: "LO2 (Cell Signaling): Explain how G-protein signaling pathways are involved the regulation of smooth muscle tone, photoreception in the retina, and in symptoms associated with cholera.",
+                question: "In the photoreceptor cells of the retina, the process of phototransduction is initiated when light activates rhodopsin. Activated rhodopsin then activates a specific G protein called transducin. What is the direct effector enzyme activated by the Gα subunit of transducin (Gαt)?",
+                options: { A: "Adenylyl cyclase (AC)", B: "Phospholipase C (PLC)", C: "cGMP phosphodiesterase (PDE6)", D: "RhoA", E: "Protein Kinase A (PKA)" },
+                correctAnswer: "C",
+                rationale: "In the dark, rod cells have high levels of cGMP, which keeps cGMP-gated cation channels open. When light strikes, activated rhodopsin activates transducin (Gt). The Gαt-GTP subunit then activates cGMP phosphodiesterase (PDE6), which rapidly hydrolyzes cGMP to GMP. The resulting drop in cGMP concentration causes the cation channels to close, hyperpolarizing the cell.",
+                source: "Source (Cell Signaling, Slide 16): The 'Rhodopsin Signaling' diagram shows that Transducin (Gt) activates 'Phosphodiesterase (PDE6)', which in turn converts cGMP to GMP."
+            },
+            {
+                learningObjective: "LO2 (Cell Signaling): Explain how G-protein signaling pathways are involved the regulation of smooth muscle tone...",
+                question: "Contraction of vascular smooth muscle is initiated by agonists like norepinephrine and vasopressin. These agonists bind to GPCRs that couple to two major G protein pathways, leading to an increase in intracellular calcium and sensitization of the contractile apparatus. Which two Gα protein families are primarily responsible for mediating smooth muscle contraction?",
+                options: { A: "Gαs and Gαi", B: "Gαq and Gα12/13", C: "Gαt and Gαs", D: "Gαi and Gαq", E: "Gα12/13 and Gαt" },
+                correctAnswer: "B",
+                rationale: "Smooth muscle contraction is mediated by two main GPCR pathways. The Gαq pathway activates phospholipase C, leading to the production of IP3 and subsequent release of Ca2+ from the sarcoplasmic reticulum. The Gα12/13 pathway activates RhoA, which in turn activates ROCK, leading to the inhibition of myosin light chain phosphatase (MLCP) and promoting a state of contraction (calcium-independent contraction or calcium sensitization).",
+                source: "Source (Cell Signaling, Slide 13): The diagram is titled 'Contractile Agonists Signal Through Gaq and Ga12/13' and clearly shows both pathways converging to promote smooth muscle contraction."
+            },
+            {
+                learningObjective: "LO3 (Cell Signaling): Explain how cGMP signaling relaxes smooth muscle, and how this pathway is targeted to treat stable angina and erectile dysfunction.",
+                question: "A patient with stable angina is prescribed sublingual nitroglycerin. The therapeutic effect of this drug in relieving chest pain is due to the dilation of coronary arteries. Nitroglycerin achieves this by being converted in the body to a signaling molecule that directly activates soluble guanylyl cyclase. What is this signaling molecule?",
+                options: { A: "Cyclic AMP (cAMP)", B: "Nitric oxide (NO)", C: "Prostacyclin (PGI2)", D: "Acetylcholine", E: "Calcium (Ca2+)" },
+                correctAnswer: "B",
+                rationale: "Nitroglycerin is a prodrug that is metabolized to release nitric oxide (NO). NO is a potent but short-lived signaling molecule that diffuses into smooth muscle cells and binds to the heme group of soluble guanylyl cyclase, activating the enzyme. This leads to increased production of cGMP, which promotes vasodilation.",
+                source: "Source (Cell Signaling, Slide 26): The diagram 'Nitroglycerin and Nitroprusside Can Dilate Coronary Arteries' shows both drugs leading to the production of 'NO', which causes vasodilation."
+            },
+            {
+                learningObjective: "LO3 (Cell Signaling): Explain how cGMP signaling relaxes smooth muscle, and how this pathway is targeted to treat stable angina and erectile dysfunction.",
+                question: "Sildenafil is a medication used to treat erectile dysfunction. It works by enhancing the smooth muscle relaxation that is initiated by sexual stimulation and nitric oxide (NO) release. Sildenafil achieves this by inhibiting which of the following enzymes?",
+                options: { A: "Guanylyl cyclase", B: "Protein Kinase G (PKG)", C: "Nitric oxide synthase (NOS)", D: "Phosphodiesterase 5 (PDE5)", E: "Adenylyl cyclase" },
+                correctAnswer: "D",
+                rationale: "The NO/cGMP pathway mediates smooth muscle relaxation. The signal is terminated by phosphodiesterases (PDEs), which break down cGMP. Sildenafil is a selective inhibitor of PDE5, the predominant isoform in the corpus cavernosum. By inhibiting PDE5, sildenafil prevents the breakdown of cGMP, leading to its accumulation and enhanced, prolonged smooth muscle relaxation and vasodilation.",
+                source: "Source (Cell Signaling, Slide 28): The diagram 'Erectile Dysfunction Drugs Target PDE5 to Increase cGMP' clearly shows the 'PDE-5 inhibitor site of action' blocking the conversion of cGMP to 5' GMP, thus promoting 'Smooth Muscle Relaxation (erection)'."
+            },
+            {
+                learningObjective: "LO3 (Cell Signaling): Explain how cGMP signaling relaxes smooth muscle...",
+                question: "The activation of Protein Kinase G (PKG) by cGMP leads to smooth muscle relaxation through multiple mechanisms. One key action of PKG is the activation of an enzyme that dephosphorylates the myosin light chain, directly opposing the action of MLCK. What enzyme is activated by PKG to promote relaxation?",
+                options: { A: "RhoA", B: "Phospholipase C", C: "Myosin light chain phosphatase (MLCP)", D: "Adenylyl cyclase", E: "Calmodulin" },
+                correctAnswer: "C",
+                rationale: "Smooth muscle contraction is triggered by the phosphorylation of the myosin light chain (MLC) by myosin light chain kinase (MLCK). Relaxation is achieved by dephosphorylating MLC. Protein Kinase G (PKG) promotes relaxation in part by activating myosin light chain phosphatase (MLCP), which removes the phosphate from MLC.",
+                source: "Source (Cell Signaling, Slide 25): The diagram 'PKG1 Relaxes Smooth Muscle by Blocking Contraction Signaling' explicitly shows an arrow from 'PKG1 Activates:' pointing to 'MLC-phosphatase'."
+            },
+            {
+                learningObjective: "LO4 (Cell Signaling): Identify the central pathways activated by growth factors and how their dysregulation contributes to cancer.",
+                question: "A patient with colorectal cancer is found to have an activating mutation in the KRAS gene. This mutation typically renders the KRAS protein constitutively active by locking it in the GTP-bound state. This mutation would lead to the persistent activation of which downstream signaling pathway, promoting cell proliferation?",
+                options: { A: "The JAK/STAT pathway", B: "The NF-κB pathway", C: "The Ras-MAPK pathway", D: "The Wnt/β-catenin pathway", E: "The cGMP/PKG pathway" },
+                correctAnswer: "C",
+                rationale: "KRAS is a small G-protein that functions as a critical node downstream of many growth factor receptors, including EGFR. When activated by binding GTP, Ras recruits and activates Raf kinase, initiating a phosphorylation cascade known as the MAPK (mitogen-activated protein kinase) pathway (Raf -> MEK -> ERK), which ultimately leads to the expression of genes that drive cell proliferation.",
+                source: "Source (Cell Signaling, Slide 32): The 'The Ras-MAPK Pathway' diagram shows RAS activating RAF, which leads through MEK and ERK to 'Proliferation'."
+            },
+            {
+                learningObjective: "LO4 (Cell Signaling): Identify the central pathways activated by growth factors and how their dysregulation contributes to cancer.",
+                question: "The tumor suppressor protein PTEN is frequently mutated or deleted in many types of human cancers. The loss of PTEN function contributes to cancer by increasing cell survival and proliferation. PTEN is a phosphatase that acts on which of the following signaling molecules?",
+                options: { A: "Phosphoinositide 3,4,5-trisphosphate (PIP3)", B: "Cyclic AMP (cAMP)", C: "Diacylglycerol (DAG)", D: "Receptor Tyrosine Kinases (RTKs)", E: "ERK" },
+                correctAnswer: "A",
+                rationale: "PTEN is a lipid phosphatase whose primary substrate is PIP3. The PI3K-AKT pathway is a key cell survival pathway. PI3K generates the second messenger PIP3, which recruits and activates AKT. PTEN opposes this signal by dephosphorylating PIP3 back to PIP2, thus acting as a brake on the pathway. Loss of PTEN leads to an accumulation of PIP3 and constitutive activation of AKT.",
+                source: "Source (Cell Signaling, Slide 33): The diagram 'Synthesis of PI(3,4,5)P3 by PI3K' clearly shows PTEN catalyzing the reverse reaction, converting 'PI(3,4,5)P3' back to 'PIP2'."
+            },
+            {
+                learningObjective: "LO4 (Cell Signaling): Identify the central pathways activated by growth factors and how their dysregulation contributes to cancer.",
+                question: "Mutations that cause constitutive activation of the epidermal growth factor receptor (EGFR) are common drivers of non-small cell lung cancer. This leads to ligand-independent dimerization and autophosphorylation of the receptor. This autophosphorylation creates docking sites for which type of signaling protein that contains an SH2 domain?",
+                options: { A: "Heterotrimeric G proteins", B: "Adapter proteins like Grb2", C: "Cyclic nucleotide phosphodiesterases", D: "Serine/threonine phosphatases", E: "Nuclear hormone receptors" },
+                correctAnswer: "B",
+                rationale: "Upon activation, receptor tyrosine kinases (RTKs) like EGFR autophosphorylate specific tyrosine residues in their cytoplasmic tails. These phosphotyrosine residues serve as high-affinity binding sites for proteins containing Src homology 2 (SH2) domains. The adapter protein Grb2 contains an SH2 domain that binds to the activated EGFR, thereby recruiting SOS (a GEF for Ras) to the membrane and initiating the Ras-MAPK cascade.",
+                source: "Source (Cell Signaling, Slide 31): The diagram 'Hormone Binding Induces autophosphorylation of RTK's' shows the phosphorylated receptor recruiting 'Grb2' which then interacts with 'SOS' to activate 'Ras'."
+            },
+            // Pharmacokinetics Questions
+            {
+                learningObjective: "LO2 (Pharmacokinetics; No LO1): Describe the key pharmacokinetic parameters: volume of distribution (Vd), clearance (Cl) and bioavailability (F).",
+                question: "A drug that is highly bound to plasma proteins, such as heparin, is administered intravenously. This drug would be expected to have which of the following characteristics?",
+                options: { A: "A large volume of distribution (Vd)", B: "A low volume of distribution (Vd)", C: "High oral bioavailability (F)", D: "Rapid clearance by glomerular filtration", E: "Distribution into adipose tissue" },
+                correctAnswer: "B",
+                rationale: "The volume of distribution (Vd) is the apparent volume into which a drug distributes. Drugs that are large or highly bound to plasma proteins are generally confined to the vascular (plasma) compartment. Because the plasma volume is small (around 3-5 liters), these drugs have a very low apparent volume of distribution.",
+                source: "Source (Pharmacokinetics, Slide 8): 'large drugs/biologics are retained in the vascular compartment (e.g. heparin)' and (Slide 9) Vd is the 'apparent volume in which a quantity of drug is distributed'."
+            },
+            {
+                learningObjective: "LO2 (Pharmacokinetics; No LO1): Describe the key pharmacokinetic parameters...",
+                question: "A patient takes an oral dose of a medication. Due to extensive metabolism in the liver before the drug reaches systemic circulation, only 20% of the administered dose becomes active. This phenomenon describes which pharmacokinetic parameter?",
+                options: { A: "Volume of distribution (Vd)", B: "Clearance (Cl)", C: "Half-life (T1/2)", D: "Bioavailability (F)", E: "Protein binding" },
+                correctAnswer: "D",
+                rationale: "Bioavailability (F) is defined as the fraction of an administered dose of unchanged drug that reaches the systemic circulation. For oral drugs, F is often less than 100% due to incomplete absorption and/or first-pass metabolism in the gut wall and liver. An F of 20% (or 0.2) indicates low oral availability.",
+                source: "Source (Pharmacokinetics, Slide 7): 'Bioavailability (F) almost always refers to ORAL availability' and is the 'fraction of drug that reaches systemic circulation'. Slide 6 lists the 'first-pass effect' as a major disadvantage of oral administration."
+            },
+            {
+                learningObjective: "LO2 (Pharmacokinetics; No LO1): Describe the key pharmacokinetic parameters...",
+                question: "A highly lipophilic drug is administered to a patient. This drug readily crosses cell membranes and accumulates in adipose tissue. This characteristic would result in which of the following?",
+                options: { A: "A very small volume of distribution (Vd)", B: "A very large apparent volume of distribution (Vd)", C: "A high rate of renal clearance (Cl)", D: "Low binding to plasma proteins", E: "Elimination primarily as an unchanged drug in the urine" },
+                correctAnswer: "B",
+                rationale: "Volume of distribution (Vd) is the apparent volume a drug distributes into. If a drug extensively distributes out of the plasma and into tissues like fat, the concentration remaining in the plasma will be very low. Since Vd = Amount / Concentration, a very low plasma concentration results in a very large apparent Vd, often far exceeding the total body water volume.",
+                source: "Source (Pharmacokinetics, Slide 10): The diagram '10 g of drug into 1 liter +/- tissue binding' illustrates this principle. With extensive tissue binding, the plasma concentration drops, and the calculated Vd increases significantly (from 1 L to 10 L in the example)."
+            },
+            {
+                learningObjective: "LO3 (Pharmacokinetics): Calculate loading and maintenance doses adjusted for incomplete bioavailability.",
+                question: "A patient needs to achieve a target plasma concentration of 10 ng/mL for Drug B, which has a volume of distribution (Vd) of 25 L. What is the appropriate intravenous (IV) loading dose to administer? (Note: 1 ng = 10^-6 mg; 1 mL = 10^-3 L)",
+                options: { A: "0.025 mg", B: "0.25 mg", C: "2.5 mg", D: "25 mg", E: "250 mg" },
+                correctAnswer: "B",
+                rationale: "The loading dose is calculated to rapidly achieve the target concentration by filling the volume of distribution. The formula is Loading Dose = Vd × C_target. It is crucial to ensure consistent units. Vd = 25 L; C_target = 10 ng/mL = 10,000 ng/L = 0.01 mg/L. Loading Dose = 25 L × 0.01 mg/L = 0.25 mg.",
+                source: "Source (Pharmacokinetics, Page 34, Question 1): 'Vd × Ctarget = (25×10³ ml) × (10 ng ml⁻¹) = 250×10³ ng = 250,000 ng = 0.25 mg.'"
+            },
+            {
+                learningObjective: "LO3 (Pharmacokinetics): Calculate loading and maintenance doses adjusted for incomplete bioavailability.",
+                question: "A physician needs to maintain a target plasma concentration of 3 ng/mL for Drug A. The drug has a clearance (Cl) of 20 L/hr and an oral bioavailability (F) of 50%. What is the required oral maintenance dosing rate?",
+                options: { A: "0.03 mg/hr", B: "0.06 mg/hr", C: "0.12 mg/hr", D: "30 mg/hr", E: "120 mg/hr" },
+                correctAnswer: "C",
+                rationale: "The maintenance dose rate is calculated to replace the amount of drug being eliminated per unit time. The formula is Dosing Rate = (Cl × C_target) / F. First, calculate the IV rate: 20 L/hr × 3 ng/mL = 20,000 mL/hr × 3 ng/mL = 60,000 ng/hr = 0.06 mg/hr. Then, correct for oral bioavailability: 0.06 mg/hr / 0.5 = 0.12 mg/hr.",
+                source: "Source (Pharmacokinetics, Page 34, Question 4): '(Cl × Ctarget)/F = ((20×10³ ml hr⁻¹) × (3 ng ml⁻¹))/0.5 = 120×10³ ng hr⁻¹ = 120,000 ng hr⁻¹ = 0.12 mg hr⁻¹.'"
+            },
+            {
+                learningObjective: "LO3 (Pharmacokinetics): Calculate loading and maintenance doses adjusted for incomplete bioavailability.",
+                question: "A drug has an oral bioavailability (F) of 0.5. To achieve the same steady-state plasma concentration, how would the oral maintenance dose compare to the intravenous (IV) maintenance dose?",
+                options: { A: "The oral dose would be half the IV dose.", B: "The oral dose would be the same as the IV dose.", C: "The oral dose would be double the IV dose.", D: "The oral dose would be one-fifth the IV dose.", E: "The relationship cannot be determined." },
+                correctAnswer: "C",
+                rationale: "Bioavailability (F) is the fraction of the oral dose that reaches systemic circulation. If F=0.5, only half of the administered oral dose gets into the bloodstream. Therefore, to achieve the same effect as a 100% bioavailable IV dose, the oral dose must be doubled to compensate for the incomplete absorption.",
+                source: "Source (Pharmacokinetics, Slide 21): 'loading doses and dosing rates need to be corrected for F<1' and 'e.g. if F=0.5, doses would be doubled'."
+            },
+            {
+                learningObjective: "LO4 (Pharmacokinetics): Explain the differences between first-order and zero-order (saturation) elimination kinetics, and how Vd and C relate to half-life.",
+                question: "A patient takes an overdose of phenytoin. At high concentrations, the enzymes responsible for metabolizing phenytoin become saturated. This will cause the drug's elimination to switch from first-order to zero-order kinetics. Which of the following is a key feature of zero-order elimination?",
+                options: { A: "A constant fraction of the drug is eliminated per unit time.", B: "The rate of elimination is directly proportional to the drug concentration.", C: "The drug has a constant, predictable half-life.", D: "A constant amount of drug is eliminated per unit time.", E: "The elimination mechanisms are not saturated." },
+                correctAnswer: "D",
+                rationale: "In zero-order kinetics, the elimination process is saturated, meaning it is proceeding at its maximal rate. Therefore, a constant amount (e.g., 10 mg) of the drug is eliminated per hour, regardless of the plasma concentration. This is in contrast to first-order kinetics, where a constant fraction (e.g., 10%) is eliminated per hour.",
+                source: "Source (Pharmacokinetics, Slide 15): For 'Zero-order kinetics', the slide lists 'a constant amount of drug is removed per unit time' and 'elimination mechanisms are saturated'."
+            },
+            {
+                learningObjective: "LO4 (Pharmacokinetics): Explain the differences between first-order and zero-order (saturation) elimination kinetics, and how Vd and C relate to half-life.",
+                question: "Drug A has a large volume of distribution (Vd = 180 L) and a low clearance (Cl = 45 mL/min). Drug B has a small Vd (10 L) and a high clearance (90 mL/min). Which drug will have a longer half-life (T1/2)?",
+                options: { A: "Drug A", B: "Drug B", C: "Their half-lives will be equal.", D: "Half-life cannot be determined from this information.", E: "Half-life depends only on clearance." },
+                correctAnswer: "A",
+                rationale: "The half-life of a drug is directly proportional to its volume of distribution and inversely proportional to its clearance (T1/2 ∝ Vd/Cl). Drug A has a very large Vd and a low Cl, both of which contribute to a long half-life. Drug B has a small Vd and a high Cl, both of which contribute to a short half-life.",
+                source: "Source (Pharmacokinetics, Slide 17): The formula for half-life is given as 'T1/2 = 0.693 (Vd) / Cl'. (Page 32, Q1 Answer) 'Drug A. The clearance is low and the volume of distribution is large.'"
+            },
+            {
+                learningObjective: "LO4 (Pharmacokinetics): ...how Vd and C relate to half-life.",
+                question: "A drug is administered by continuous IV infusion. The time required to reach approximately 97% of its final steady-state concentration is dependent on which pharmacokinetic parameter?",
+                options: { A: "Bioavailability (F)", B: "Half-life (T1/2)", C: "Volume of distribution (Vd) only", D: "Clearance (Cl) only", E: "The infusion rate" },
+                correctAnswer: "B",
+                rationale: "The approach to steady-state during a continuous infusion is determined by the drug's elimination half-life. It takes approximately 4 to 5 half-lives to reach steady-state concentration, regardless of the infusion rate. The infusion rate determines the *level* of the steady-state concentration, but not the *time* it takes to get there.",
+                source: "Source (Pharmacokinetics, Slide 18): 'approach to steady-state determined by T1/2'. The graph shows the drug concentration approaching a plateau over time."
+            },
+            {
+                learningObjective: "LO5 (Pharmacokinetics): List and explain the major mechanisms of drug interactions.",
+                question: "A patient taking warfarin (an anticoagulant) is started on a course of rifampin (an antibiotic) for tuberculosis. Rifampin is a potent inducer of CYP enzymes, including CYP2C9 which metabolizes warfarin. What is the most likely consequence of this drug interaction?",
+                options: { A: "Increased plasma levels of warfarin, leading to risk of bleeding.", B: "Decreased plasma levels of warfarin, leading to risk of clotting.", C: "Displacement of warfarin from plasma proteins, increasing its effect.", D: "Inhibition of P-glycoprotein, increasing warfarin absorption.", E: "No significant interaction will occur." },
+                correctAnswer: "B",
+                rationale: "Rifampin induces CYP enzymes, which increases the rate of metabolism of other drugs that are substrates for those enzymes. This will accelerate the clearance of warfarin, leading to lower plasma concentrations and a subtherapeutic anticoagulant effect, which increases the risk of thrombosis (clotting).",
+                source: "Source (Pharmacokinetics, Slide 26): 'Common mechanisms of drug-drug interactions: • inhibition or induction of CYP enzymes'."
+            },
+            {
+                learningObjective: "LO5 (Pharmacokinetics): List and explain the major mechanisms of drug interactions.",
+                question: "A patient is taking digoxin, a cardiac drug with a narrow therapeutic window that is a substrate for the P-glycoprotein (P-GP) efflux transporter in the gut. The patient is then prescribed clarithromycin, a potent P-GP inhibitor. This interaction will most likely lead to which of the following?",
+                options: { A: "Decreased absorption and lower plasma levels of digoxin", B: "Increased absorption and higher plasma levels of digoxin", C: "Increased metabolism of digoxin in the liver", D: "Decreased binding of digoxin to plasma proteins", E: "Faster renal excretion of digoxin" },
+                correctAnswer: "B",
+                rationale: "P-glycoprotein (P-GP) is an efflux pump in the intestinal epithelium that actively transports certain drugs (like digoxin) back into the lumen, limiting their absorption. An inhibitor of P-GP, like clarithromycin, will block this efflux, leading to increased absorption and potentially toxic plasma concentrations of digoxin.",
+                source: "Source (Pharmacokinetics, Slide 5): 'P-glycoprotein (P-GP) can limit absorption/CNS exposure.' and (Slide 26) 'inhibition or induction of P-GP' is listed as a common mechanism of drug interactions."
+            },
+            {
+                learningObjective: "LO5 (Pharmacokinetics): List and explain the major mechanisms of drug interactions.",
+                question: "A patient is on a stable dose of warfarin, which is 99% bound to plasma albumin. The patient begins taking a high dose of a sulfonamide antibiotic, which is also highly protein-bound and can displace warfarin from albumin. What is the immediate effect of this displacement?",
+                options: { A: "A decrease in the free (active) concentration of warfarin", B: "An increase in the free (active) concentration of warfarin", C: "A decrease in the total concentration of warfarin", D: "An increase in the rate of warfarin metabolism", E: "No change in the pharmacological effect of warfarin" },
+                correctAnswer: "B",
+                rationale: "Only the unbound (free) fraction of a drug is pharmacologically active and available for metabolism and excretion. When a second drug displaces the first drug from plasma proteins, it transiently increases the concentration of free, active drug. For a drug with a narrow therapeutic index like warfarin, this can lead to a significant increase in effect and toxicity (bleeding).",
+                source: "Source (Pharmacokinetics, Slide 26): 'Common mechanisms of drug-drug interactions: • displacement from plasma protein binding'."
+            },
+            {
+                learningObjective: "LO6 (Pharmacokinetics): Discuss the implications of pharmacokinetic genetic polymorphism.",
+                question: "A patient of Asian descent is started on a standard dose of warfarin. Genetic testing reveals they have the VKORC1 AA genotype. Compared to a patient with the more common BB genotype, how would this polymorphism likely affect their warfarin dose requirement?",
+                options: { A: "They will require a significantly higher dose.", B: "They will require a significantly lower dose.", C: "Their dose requirement will be unchanged.", D: "They will be completely resistant to warfarin.", E: "They will metabolize warfarin more rapidly." },
+                correctAnswer: "B",
+                rationale: "The VKORC1 gene codes for the target enzyme of warfarin. The 'A' allele is associated with increased sensitivity to warfarin, meaning less drug is required to achieve the same anticoagulant effect. The VKORC1 AA genotype is highly prevalent in Asian populations and is associated with a much lower warfarin dose requirement compared to the BB genotype common in African populations.",
+                source: "Source (Pharmacokinetics, Slide 25, Table): The table shows that the '2C9*1/*1, VKORC1 AA' allelic type has a warfarin dose of 3.5 mg/d and is 80% prevalent in Asians, whereas the '2C9*1/*1, VKORC1 BB' type has a dose of 6.1 mg/d."
+            },
+            {
+                learningObjective: "LO6 (Pharmacokinetics): Discuss the implications of pharmacokinetic genetic polymorphism.",
+                question: "A patient is identified as a 'CYP2D6 poor metabolizer' due to genetic polymorphisms. They are prescribed a standard dose of aripiprazole (Abilify), which is primarily metabolized by CYP2D6. What dose adjustment is recommended for this patient?",
+                options: { A: "Double the usual dose", B: "Administer the usual dose", C: "Administer half of the usual dose", D: "Administer a quarter of the usual dose", E: "Discontinue the drug immediately" },
+                correctAnswer: "C",
+                rationale: "A 'poor metabolizer' has little to no functional CYP2D6 enzyme activity. Administering a standard dose of a drug metabolized by this enzyme would lead to accumulation and increased risk of toxicity. Therefore, the dose must be significantly reduced. For Abilify, the recommendation is to cut the dose in half for known poor metabolizers.",
+                source: "Source (Pharmacokinetics, Slide 27, Table): The table 'Dose Adjustments for ABILIFY' clearly states for the factor 'Known CYP2D6 Poor Metabolizers', the adjustment is to 'Administer half of usual dose'."
+            },
+            {
+                learningObjective: "LO6 (Pharmacokinetics): Discuss the implications of pharmacokinetic genetic polymorphism.",
+                question: "A patient who is a known CYP2D6 poor metabolizer is also taking itraconazole, a strong inhibitor of the CYP3A4 enzyme. If this patient needs to be treated with aripiprazole (Abilify), which is metabolized by both CYP2D6 and CYP3A4, what is the appropriate dose adjustment?",
+                options: { A: "Administer half of the usual dose", B: "Administer the usual dose", C: "Administer a quarter of the usual dose", D: "Double the usual dose", E: "Administer one-eighth of the usual dose" },
+                correctAnswer: "C",
+                rationale: "This patient has two factors that drastically reduce the clearance of aripiprazole: they are genetically a poor metabolizer via the CYP2D6 pathway, and they are taking a drug that strongly inhibits the alternative CYP3A4 pathway. With both major metabolic routes compromised, the dose must be reduced even further than for a poor metabolizer alone. The guideline is to reduce the dose to one quarter of the usual dose.",
+                source: "Source (Pharmacokinetics, Slide 27, Table): For the factor 'Known CYP2D6 Poor Metabolizers taking concomitant strong CYP3A4 inhibitors', the recommended dosage adjustment is to 'Administer a quarter of usual dose'."
+            },
+            // Patterns of Inheritance Questions
+            {
+                learningObjective: "LO1 (Inheritance): Draw and analyze a pedigree to determine the human inheritance patterns...",
+                question: "A pedigree shows a trait that appears in every generation. Affected individuals are both male and female. An affected father is shown to have an affected son. What is the most likely mode of inheritance?",
+                options: { A: "Autosomal recessive", B: "Autosomal dominant", C: "X-linked recessive", D: "X-linked dominant", E: "Mitochondrial" },
+                correctAnswer: "B",
+                rationale: "The presence of the trait in every generation indicates a dominant pattern. The key finding is male-to-male transmission (affected father to affected son). This rules out all X-linked inheritance, as a father passes his Y chromosome, not his X, to his sons. It also rules out mitochondrial inheritance, which is exclusively maternal.",
+                source: "Source (Patterns of Inheritance Handout, Page 3): For Autosomal Dominant Inheritance, the handout states: 'Every generation of the pedigree is affected – vertical transmission' and 'Male to male transmission does occur – useful in differentiating from X-linked'."
+            },
+            {
+                learningObjective: "LO1 (Inheritance): ...and explain the effect of lyonization on X-linked inheritance.",
+                question: "A female is heterozygous for an X-linked recessive disorder, such as Duchenne muscular dystrophy. She is typically an unaffected carrier, but in some cases, she may exhibit mild muscle weakness. This phenomenon, where a heterozygous female shows some symptoms of an X-linked recessive condition, is best explained by:",
+                options: { A: "Incomplete penetrance", B: "Variable expressivity", C: "Skewed lyonization (X-inactivation)", D: "Mitochondrial heteroplasmy", E: "Genomic imprinting" },
+                correctAnswer: "C",
+                rationale: "Lyonization is the process of random X-chromosome inactivation in the cells of female mammals. Usually, this results in a mosaic of cells where roughly 50% express the paternal X and 50% express the maternal X. However, if this inactivation is skewed by chance, such that the majority of cells in a relevant tissue (like muscle) inactivate the normal X chromosome, the female can express symptoms of the recessive disorder. This is known as being a 'manifesting carrier'.",
+                source: "Source (Patterns of Inheritance Handout, Page 4): 'Heterozygous females are usually unaffected, however, may express the condition with variable severity - called manifesting carriers. Why so? – Lyonization!'"
+            },
+            {
+                learningObjective: "LO1 (Inheritance): Draw and analyze a pedigree to determine the human inheritance patterns...",
+                question: "An affected male has a daughter who is affected, but all of his sons are unaffected. The affected daughter and her unaffected partner have both affected sons and affected daughters. What is the most likely mode of inheritance for this trait?",
+                options: { A: "Autosomal recessive", B: "Autosomal dominant", C: "X-linked recessive", D: "X-linked dominant", E: "Y-linked" },
+                correctAnswer: "D",
+                rationale: "The key feature is that an affected male passes the trait to ALL of his daughters and NONE of his sons. This is the hallmark of X-linked dominant inheritance. A male gives his only X chromosome to all his daughters, so they must be affected. He gives his Y chromosome to his sons, so they cannot be affected by him.",
+                source: "Source (Patterns of Inheritance Handout, Page 4): For X-linked Dominant Inheritance: 'Daughters of affected fathers are always affected' and 'No father to son transmission'."
+            },
+            {
+                learningObjective: "LO2 (Inheritance): Define consanguinity and explain its effect on the inheritance risk for diseases due to single gene disorders.",
+                question: "A pedigree shows two individuals who are first cousins and are married to each other. This type of union is referred to as consanguineous. Consanguinity increases the risk for their offspring to be affected by which type of genetic disorder?",
+                options: { A: "Autosomal dominant disorders", B: "Autosomal recessive disorders", C: "X-linked dominant disorders", D: "Mitochondrial disorders", E: "Chromosomal aneuploidies" },
+                correctAnswer: "B",
+                rationale: "Consanguineous individuals have a higher chance of sharing the same alleles inherited from a common ancestor. This significantly increases the probability that both partners will be heterozygous carriers for the same rare recessive allele. Therefore, their offspring have a much higher risk of inheriting two copies of the mutant allele and being affected by a rare autosomal recessive disease.",
+                source: "Source (Patterns of Inheritance Handout, Page 3): 'Recessive Inheritance and Consanguinity... Increases the chance that a couple will both carry the same disease gene.'"
+            },
+            {
+                learningObjective: "LO2 (Inheritance): Define consanguinity and explain its effect on the inheritance risk...",
+                question: "In a pedigree analysis for a very rare autosomal recessive disease, the presence of consanguinity in the parents of an affected individual would have what effect on the interpretation?",
+                options: { A: "It would make an autosomal recessive diagnosis less likely.", B: "It would strongly support the diagnosis of an autosomal recessive condition.", C: "It would suggest an X-linked dominant inheritance pattern.", D: "It would indicate a new mutation has occurred.", E: "It has no bearing on the interpretation of the pedigree." },
+                correctAnswer: "B",
+                rationale: "For rare diseases, the chance of two unrelated individuals being carriers is very low. The appearance of an autosomal recessive condition in a family is much more likely if the parents share common ancestry, as this increases the likelihood they both inherited the same rare recessive allele. Therefore, finding consanguinity provides strong evidence for autosomal recessive inheritance.",
+                source: "Source (Patterns of Inheritance Handout, Page 3): '[Consanguinity is] Seen more frequently in pedigrees involving rare recessive diseases than in those involving common recessive diseases.'"
+            },
+            {
+                learningObjective: "LO2 (Inheritance): Define consanguinity and explain its effect on the inheritance risk...",
+                question: "First cousins share, on average, what proportion of their genes?",
+                options: { A: "1/2", B: "1/4", C: "1/8", D: "1/16", E: "1/32" },
+                correctAnswer: "C",
+                rationale: "Siblings share 1/2 of their genes on average. First cousins are the children of siblings. The chance of a specific allele passing from a grandparent to two of their children (the parents of the cousins) is (1/2) * (1/2) = 1/4. The chance of it then passing to each cousin is another (1/2) * (1/2) = 1/4. The total relatedness is more complex, but the proportion of genes shared is 1/8.",
+                source: "Source (Patterns of Inheritance Handout, Page 3): 'Siblings share 1/2 of their genes on average, first cousins share 1/8, first cousins once removed share 1/16, second cousins share 1/32.'"
+            },
+            {
+                learningObjective: "LO3 (Inheritance): List some of the most common conditions that complicate interpretation of a human pedigree.",
+                question: "A man is diagnosed with neurofibromatosis type 1 (NF1), an autosomal dominant disorder. He has numerous café-au-lait spots and dermal neurofibromas. His daughter inherits the same NF1 mutation but only displays café-au-lait spots and has no neurofibromas. This difference in the severity and range of symptoms between family members with the same genotype is an example of:",
+                options: { A: "Incomplete penetrance", B: "Variable expressivity", C: "Locus heterogeneity", D: "Allelic heterogeneity", E: "Germline mosaicism" },
+                correctAnswer: "B",
+                rationale: "Variable expressivity describes the phenomenon where individuals with the same disease-causing genotype exhibit a range of clinical phenotypes, from mild to severe. Both the father and daughter have the disease (so penetrance is complete), but the severity and types of symptoms differ, which is classic variable expressivity.",
+                source: "Source (Inheritance Definitions, Page 5): 'Variable expressivity... Variation in the spectrum or range of the clinical phenotype (picture), differs between individuals... FBN1 (Marfan Syndrome)' and (Page 6) 'Variable Expressivity: Some individuals even within the same family with the same genotype in the NF1 gene might display only Café au lait macules...'"
+            },
+            {
+                learningObjective: "LO3 (Inheritance): List some of the most common conditions that complicate interpretation of a human pedigree.",
+                question: "A pedigree for an autosomal dominant disorder shows an affected grandfather and an affected granddaughter, but the intervening father is completely asymptomatic at age 60. The gene is known to have 80% penetrance. This situation, where an individual has the disease-causing genotype but does not exhibit the phenotype, is known as:",
+                options: { A: "A new mutation", B: "Variable expressivity", C: "Reduced or incomplete penetrance", D: "Consanguinity", E: "Anticipation" },
+                correctAnswer: "C",
+                rationale: "Penetrance is an all-or-nothing concept; it refers to the proportion of individuals with a given genotype who show the expected phenotype at all. If an individual inherits the dominant allele but shows no signs of the disease, the trait is said to show reduced or incomplete penetrance.",
+                source: "Source (Patterns of Inheritance Handout, Page 5): 'Reduced penetrance – Sometimes an individual will inherit an autosomal dominant disease-causing allele but never manifests the disease... This phenomenon is called incomplete penetrance.'"
+            },
+            {
+                learningObjective: "LO3 (Inheritance): List some of the most common conditions that complicate interpretation of a human pedigree.",
+                question: "A child is born with achondroplasia, an autosomal dominant form of dwarfism. However, both of his parents are of average height and have no family history of the condition. What is the most likely explanation for the child's condition?",
+                options: { A: "Autosomal recessive inheritance", B: "Incomplete penetrance in one parent", C: "A de novo (new) mutation", D: "Germline mosaicism in both parents", E: "Variable expressivity" },
+                correctAnswer: "C",
+                rationale: "For many autosomal dominant disorders with high penetrance, the appearance of the condition in a child of unaffected parents is most often due to a new (de novo) mutation that occurred in the germline (sperm or egg) of one of the parents. Achondroplasia has a high new mutation rate.",
+                source: "Source (Patterns of Inheritance Handout, Page 5): 'New mutation – when the mutation appears for the first time in the family... New mutations are very common underlying cause in many autosomal dominant disorders. E.g., achondroplasia... ~80% of cases;... neurofibromatosis type 1: ~50% of cases.'"
+            },
+            {
+                learningObjective: "LO4 (Inheritance): Explain the Hardy-Weinberg principle and equation and apply them to calculate frequency...",
+                question: "In a certain population, the incidence of an autosomal recessive disease is 1 in 10,000 births. According to the Hardy-Weinberg equilibrium, what is the approximate frequency of heterozygous carriers for this disease in the population?",
+                options: { A: "1/10,000", B: "1/100", C: "1/50", D: "1/25", E: "1/10" },
+                correctAnswer: "C",
+                rationale: "The disease incidence represents the frequency of the homozygous recessive genotype (q²). So, q² = 1/10,000. The allele frequency (q) is the square root of the incidence, so q = √(1/10,000) = 1/100. The carrier frequency is 2pq. For a rare disease, p is approximately 1. Therefore, the carrier frequency is approximately 2q = 2 * (1/100) = 1/50.",
+                source: "Source (Inheritance Definitions, Page 29): 'q2 = disease incidence; 2pq = carriers. For rare recessive conditions, p approximates 1. Therefore, heterozygote carrier frequency (2pq) is approximately 2q.'"
+            },
+            {
+                learningObjective: "LO4 (Inheritance): Explain the Hardy-Weinberg principle and equation and apply them to calculate frequency...",
+                question: "The incidence of hemophilia A, an X-linked recessive disorder, is approximately 1 in 5,000 newborn males. What is the frequency of the mutant F8 allele (q) in this population?",
+                options: { A: "1/25,000,000", B: "1/10,000", C: "1/5000", D: "1/2500", E: "1/71" },
+                correctAnswer: "C",
+                rationale: "For X-linked traits, the phenotype frequency in males directly reflects the allele frequency in the population. This is because males are hemizygous (have only one X chromosome). Therefore, the incidence of an X-linked recessive disorder in males is equal to the frequency of the recessive allele (q).",
+                source: "Source (Patterns of Inheritance Handout, Page 6): 'Important Concept: For a X-Linked recessive disease... Males have only one X linked allele to be affected, so for them the incidence is just q, the allelic frequency. Thus, the frequency of the diseased allele for a X-linked disease is also the frequency of diseased males in the population.'"
+            },
+            {
+                learningObjective: "LO4 (Inheritance): Explain the Hardy-Weinberg principle and equation...",
+                question: "All of the following are assumptions of the Hardy-Weinberg equilibrium principle EXCEPT:",
+                options: { A: "The population is large.", B: "Mating is random.", C: "There is no mutation or migration.", D: "Natural selection is occurring.", E: "Allele frequencies remain stable." },
+                correctAnswer: "D",
+                rationale: "The Hardy-Weinberg principle describes a hypothetical, non-evolving population. It assumes there are no evolutionary forces at play. Natural selection is a major evolutionary force that changes allele frequencies by favoring certain genotypes over others, and therefore it violates the assumptions of Hardy-Weinberg equilibrium.",
+                source: "Source (Inheritance Definitions, Page 30): The slide 'Hardy-Weinberg Equilibrium' lists the assumptions: 'Large population', 'No mutation', 'No selection', 'Random mating', 'No migration', 'Frequencies remain stable'."
+            },
+            {
+                learningObjective: "LO5 (Inheritance): Identify the recurrence risk for individuals in pedigrees with single gene disorders.",
+                question: "A couple has a child affected with an autosomal recessive condition. They are both phenotypically normal. What is the recurrence risk for this condition in their next child?",
+                options: { A: "0%", B: "25%", C: "50%", D: "75%", E: "100%" },
+                correctAnswer: "B",
+                rationale: "Since the child is affected with an autosomal recessive disorder (genotype aa), both parents must be heterozygous carriers (genotype Aa). For any pregnancy from an Aa x Aa cross, the probability of having an affected child (aa) is 1 in 4, or 25%. This risk is independent for each pregnancy.",
+                source: "Source (Patterns of Inheritance Handout, Page 3): 'On average 25% of the children affected when union is between 2 heterozygous individuals'."
+            },
+            {
+                learningObjective: "LO5 (Inheritance): Identify the recurrence risk for individuals in pedigrees with single gene disorders.",
+                question: "A man is affected with an autosomal dominant disorder. His partner is unaffected. What is the probability that their first child will be affected by the disorder?",
+                options: { A: "0%", B: "25%", C: "50%", D: "75%", E: "100%" },
+                correctAnswer: "C",
+                rationale: "The affected man is most likely heterozygous (Aa), as homozygous dominant conditions are often very severe or lethal. The unaffected partner is homozygous recessive (aa). For an Aa x aa cross, there is a 50% chance for each child to inherit the dominant allele (A) and be affected, and a 50% chance to inherit the recessive allele (a) and be unaffected.",
+                source: "Source (Patterns of Inheritance Handout, Page 3): 'Unions between heterozygous affected and normal is more common; risk of inheritance 50%.'"
+            },
+            {
+                learningObjective: "LO5 (Inheritance): Identify the recurrence risk for individuals in pedigrees with single gene disorders.",
+                question: "A woman is a known carrier for hemophilia A, an X-linked recessive disorder. She and her partner, who is unaffected, are planning a pregnancy. What is the probability that they will have an affected son?",
+                options: { A: "0%", B: "25%", C: "50%", D: "75%", E: "100%" },
+                correctAnswer: "B",
+                rationale: "The risk can be broken down into two independent probabilities: the probability of having a son (1/2) and the probability of that son inheriting the mother's affected X chromosome (1/2). The overall probability of having an affected son is the product of these two probabilities: (1/2) * (1/2) = 1/4 or 25%.",
+                source: "Source (Patterns of Inheritance Handout, Page 4): '50% of carrier woman's sons are affected and daughters are carriers.' This implies a 50% risk for any given son. The question asks for the risk for any given child to be an affected son, which is 1/4."
+            },
+            {
+                learningObjective: "LO6 (Inheritance): Calculate an individual’s risk using pedigree analysis and population gene frequency.",
+                question: "Jane's brother died of cystic fibrosis (AR). The carrier frequency for cystic fibrosis in her partner Eric's population is 1/25. What is the risk that their first child will have cystic fibrosis?",
+                options: { A: "1/50", B: "1/75", C: "1/100", D: "1/150", E: "1/300" },
+                correctAnswer: "D",
+                rationale: "First, determine Jane's carrier risk. Since her parents had an affected child, they must both be carriers (Aa). Jane is unaffected, so her possible genotypes are AA and Aa. The probability of her being a carrier (Aa) is 2/3. Eric's carrier risk is given as 1/25. The risk for their child is the product of (Jane's carrier risk) x (Eric's carrier risk) x (probability of two carriers having an affected child) = (2/3) x (1/25) x (1/4) = 2/300 = 1/150.",
+                source: "Source (Inheritance Definitions, Page 35): This exact problem is worked out on the slide. 'Jane's carrier risk = 2/3', 'Eric's carrier risk = 1/25', 'Risk future child would have CF = (2/3) (1/25) (1/4) = 1/150'."
+            },
+            {
+                learningObjective: "LO6 (Inheritance): Calculate an individual’s risk using pedigree analysis and population gene frequency.",
+                question: "A woman's brother has an autosomal recessive disorder with a population incidence of 1/400. She partners with an unrelated, unaffected man from the same population. What is the risk of their child being affected?",
+                options: { A: "1/60", B: "1/80", C: "1/120", D: "1/240", E: "1/400" },
+                correctAnswer: "A",
+                rationale: "The woman's carrier risk is 2/3 (since she is the unaffected sibling of an affected individual). For the man, we calculate his carrier risk from the population incidence. q² = 1/400, so q = 1/20. Carrier risk (2pq) is approx. 2q = 2(1/20) = 1/10. The final risk is (woman's risk) x (man's risk) x (1/4) = (2/3) x (1/10) x (1/4) = 2/120 = 1/60.",
+                source: "Source (Inheritance Definitions, Page 37): This exact scenario is presented. 'The male in the couple has a 2/3 risk.' 'The frequency of the allele is 1/20... Carrier frequency is approximately 1/10.' 'Hence their risk of having an affected child is (2/3)(1/10)(1/4)= 1/60'."
+            },
+            {
+                learningObjective: "LO6 (Inheritance): Calculate an individual’s risk using pedigree analysis and population gene frequency.",
+                question: "A woman is a carrier for an X-linked recessive disease. Her partner is an unaffected male from a population where the disease incidence in males is 1/100. What is the risk for their daughter to be a carrier?",
+                options: { A: "1/400", B: "1/200", C: "1/100", D: "1/4", E: "1/2" },
+                correctAnswer: "E",
+                rationale: "The population frequency information for the male partner is irrelevant for calculating the daughter's carrier risk. A daughter inherits one X chromosome from her mother and one from her father. Since the mother is a carrier (XAXa), there is a 1/2 chance she will pass on her mutant allele (Xa) to her daughter. The father (XAY) will always pass his normal XA to his daughter. Therefore, the daughter has a 1/2 probability of being a carrier (XAXa).",
+                source: "Source (Patterns of Inheritance Handout, Page 4): '50% of carrier woman's sons are affected and daughters are carriers.' This directly states the risk for a daughter to be a carrier is 1/2 or 50%."
+            },
+            // Newborn Screening & Genetic Counseling Questions
+            {
+                learningObjective: "LO1 (NBS): Describe the importance of timely newborn screening and summarize Healthcare Provider Responsibilities...",
+                question: "A primary care physician receives a call from the state newborn screening lab on a Friday afternoon indicating that a 3-day-old patient, 'Baby Anna,' has a phenylalanine level of 430 µM (normal <152). What is the most appropriate immediate next step for the physician?",
+                options: { A: "Wait until Monday to contact the family to avoid causing weekend anxiety.", B: "Advise the mother to immediately stop breastfeeding.", C: "Inform the family of the abnormal result and arrange for immediate evaluation and consultation with a metabolic specialist.", D: "Schedule a routine follow-up appointment for the following week.", E: "Assume the test is a false positive and recommend a re-test in one month." },
+                correctAnswer: "C",
+                rationale: "Newborn screening results indicating a possible serious metabolic disorder like PKU require urgent action. The primary provider's responsibility is to act immediately to prevent irreversible damage. This involves informing the family, evaluating the infant, and consulting with a specialist to initiate confirmatory testing and management without delay.",
+                source: "Source (Newborn Screening, Slide 9 & 11): The case example of 'Baby Anna' with an elevated Phe level on a Friday afternoon leads to the answer 'E) All of above', which includes informing the family, evaluating the baby, and consulting a specialist to initiate tests. This emphasizes the urgency and comprehensive nature of the required response."
+            },
+            {
+                learningObjective: "LO1 (NBS): Describe the importance of timely newborn screening...",
+                question: "Newborn screening (NBS) is considered a proactive public health measure, whereas general clinical testing is considered reactive. What is the fundamental difference that defines NBS as proactive?",
+                options: { A: "NBS uses more advanced technology than general clinical testing.", B: "NBS is performed on all newborns, aiming to identify conditions before symptoms appear.", C: "NBS is only performed on infants with a positive family history of genetic disorders.", D: "NBS tests for conditions that are not serious.", E: "NBS results are always definitive and do not require confirmatory testing." },
+                correctAnswer: "B",
+                rationale: "The proactive nature of NBS comes from its universal application to an asymptomatic population (all newborns). The goal is to detect serious, treatable conditions at a preclinical stage, before the onset of irreversible damage. General clinical testing is reactive because it is typically initiated in response to existing signs, symptoms, or a known family history.",
+                source: "Source (Newborn Screening, Slide 5): 'NBS: Completed on all babies to identify those to treat (preclinical stage is before disease onset)' and 'NBS is Proactive'."
+            },
+            {
+                learningObjective: "LO1 (NBS): Describe the importance of timely newborn screening...",
+                question: "Which of the following is a key criterion for including a disorder in a state's newborn screening panel?",
+                options: { A: "The disorder must be extremely rare, affecting fewer than 1 in 1,000,000 births.", B: "The disorder must be easily diagnosed by physical examination alone.", C: "An effective and available early treatment exists that improves outcomes.", D: "The test for the disorder is expensive and complex.", E: "The disorder causes only mild, non-permanent symptoms if left untreated." },
+                correctAnswer: "C",
+                rationale: "A central tenet of newborn screening is that the disorders included must be treatable. The primary purpose of screening is to identify affected infants early so that an intervention can be started to prevent or reduce the severe, often irreversible, damage associated with the condition.",
+                source: "Source (Newborn Screening, Slide 4): 'NBS: Criteria' includes 'Diagnosis enables an intervention that improves outcome' and 'If left untreated, it causes irreversible damage'."
+            },
+            {
+                learningObjective: "LO2 (NBS): Describe when and how to make appropriate referrals for genetic evaluations, to genetics support groups...",
+                question: "A couple presents for preconception counseling. The woman's brother has cystic fibrosis. They have no affected children. In addition to calculating their recurrence risk, what would be an appropriate referral for this couple?",
+                options: { A: "A referral to a pulmonologist for the woman.", B: "A referral for couples therapy.", C: "A referral to a genetic counselor to discuss carrier testing and reproductive options.", D: "A referral to a pediatric specialist for their future child.", E: "No referral is necessary as their risk is low." },
+                correctAnswer: "C",
+                rationale: "This couple has a clear indication for genetic counseling. A genetic counselor can provide a detailed risk assessment, discuss the benefits and limitations of carrier screening for both partners, and explain various reproductive options (such as prenatal diagnosis or preimplantation genetic testing) in a non-directive manner, allowing the couple to make informed choices.",
+                source: "Source (Newborn Screening, Slide 16): 'Genetic counseling is the process of helping people understand and adapt to the medical, psychological and familial implications of genetic contributions to health and to disease.' This process includes 'Interpretation of family... histories to assess the chance of disease... [and] Education about inheritance, testing, management...'"
+            },
+            {
+                learningObjective: "LO2 (NBS): Describe when and how to make appropriate referrals...",
+                question: "A pediatrician sees a 4-year-old boy with several café-au-lait macules, axillary freckling, and a family history of a parent with multiple skin nodules. The pediatrician suspects Neurofibromatosis type 1 (NF1). What is the most appropriate next step?",
+                options: { A: "Reassure the parents that these are benign birthmarks and no further action is needed.", B: "Refer the child to a dermatologist for removal of the skin spots.", C: "Refer the family to a clinical geneticist for diagnostic evaluation and counseling.", D: "Order a brain MRI immediately without further consultation.", E: "Tell the parents to monitor for any changes and return in one year." },
+                correctAnswer: "C",
+                rationale: "The patient presents with classic signs of NF1, a genetic disorder with variable expressivity and potential for serious complications (e.g., tumors). The appropriate course of action is to refer to a specialist in genetics who can confirm the diagnosis, provide comprehensive counseling about the condition's natural history and management, and coordinate care with other specialists as needed.",
+                source: "Source (Newborn Screening, Slide 16): The principles of genetic counseling involve 'Interpretation of family and medical histories', 'Education about inheritance, testing, management, prevention, resources and research', which are best handled by a specialist referral in this case."
+            },
+            {
+                learningObjective: "LO2 (NBS): Describe when and how to make appropriate referrals...",
+                question: "After a diagnosis of a rare genetic disorder is confirmed in a child, the family expresses feelings of isolation and wants to connect with others who share their experience. The most helpful resource a healthcare provider can suggest is:",
+                options: { A: "A general internet search engine.", B: "A medical textbook.", C: "A research publication database.", D: "Advocacy and support groups for the specific condition.", E: "The hospital's billing department." },
+                correctAnswer: "D",
+                rationale: "Connecting families with condition-specific advocacy and support groups is a crucial part of comprehensive genetic counseling and care. These groups provide valuable emotional support, practical advice, educational materials, and information about the latest research, helping families to cope and adapt to the diagnosis.",
+                source: "Source (Newborn Screening, Slide 21): Under 'Approach to Genetic Counseling', the slide lists 'Identifying resources' and specifically mentions 'Advocacy and support groups; connect with other families'."
+            },
+            {
+                learningObjective: "LO3 (NBS): Be able to apply patient-centered, informed, non-coercive and value-based decision-making genetic counseling skills...",
+                question: "A 14-year-old healthy boy, John, is brought to clinic by his mother. John's father and paternal grandfather both have Huntington disease (HD), an autosomal dominant neurodegenerative disorder with adult onset. The mother wants John to be tested to see if he inherited the gene. John is ambivalent. What is the most appropriate approach for the physician?",
+                options: { A: "Agree to the mother's request and order the test immediately to relieve her anxiety.", B: "Refuse to test John under any circumstances until he is 18.", C: "Explain that the goal is shared, non-directive decision-making and recommend deferring predictive testing until John is a legally competent adult who can make his own informed choice.", D: "Perform the test but only disclose the results to the mother.", E: "Insist that John must be tested for his own good." },
+                correctAnswer: "C",
+                rationale: "The guiding principles of genetic counseling are non-directiveness and shared decision-making, with the goal of helping individuals make their own best decisions. For adult-onset conditions like HD, presymptomatic testing in a minor offers no immediate medical benefit and removes the child's future autonomy to decide whether or not they want to know this information. The standard of care is to defer testing until adulthood.",
+                source: "Source (Newborn Screening, Slide 17): 'Your Goal as a Counselor: Help individuals to make their own best decisions. Your Approach: Non-directive, Shared decision making.' and (Slide 24) 'Guidelines: Presymptomatic testing in minors... Parents or minor request testing with no immediate benefit to the minor -> Advisable to defer testing to adulthood. This allows the child to make their own decision when they are ready.'"
+            },
+            {
+                learningObjective: "LO3 (NBS): Be able to apply patient-centered, informed, non-coercive and value-based decision-making genetic counseling skills...",
+                question: "The Genetic Information Nondiscrimination Act (GINA) of 2008 provides federal protection against genetic discrimination. However, these protections do not extend to which of the following?",
+                options: { A: "Health insurance coverage", B: "Group health plan premiums", C: "Hiring and firing decisions by large employers", D: "Life, disability, or long-term care insurance", E: "Eligibility for a clinical trial" },
+                correctAnswer: "D",
+                rationale: "GINA's protections are significant but specifically limited. It prevents health insurers from using genetic information for coverage or rate-setting decisions and prohibits employers from using it in hiring, firing, or promotion decisions. However, GINA does not apply to other types of insurance like life, disability, or long-term care insurance.",
+                source: "Source (Newborn Screening, Slide 23): 'Does not extend to life, disability, or long-term care insurance.'"
+            },
+            {
+                learningObjective: "LO3 (NBS): Be able to apply patient-centered, informed, non-coercive and value-based decision-making genetic counseling skills...",
+                question: "A core principle of genetic counseling is to present information and options in a balanced, impartial way, without steering the patient toward a specific choice. This approach is best described as:",
+                options: { A: "Paternalistic", B: "Directive", C: "Coercive", D: "Non-directive", E: "Reactive" },
+                correctAnswer: "D",
+                rationale: "Non-directive counseling is a cornerstone of medical genetics. The counselor's role is to educate and empower the patient by providing them with the necessary information about their condition, the risks, and all available options, so that the patient can make a personal decision that aligns with their own values and beliefs.",
+                source: "Source (Newborn Screening, Slide 17): 'Your Approach: • Non-directive • Shared decision making'."
+            },
+            {
+                learningObjective: "LO4 (NBS): Review clinical presentations, disorders, diagnosis and treatment of selected disorders... in the State of Georgia Newborn Screening Panel.",
+                question: "A newborn's screening result is positive for classical galactosemia, showing absent GALT enzyme activity. The infant has begun vomiting and is jaundiced. In addition to repeating the diagnostic tests and consulting a metabolic specialist, what is the most critical and immediate management step?",
+                options: { A: "Start a low-protein diet.", B: "Administer Kuvan (sapropterin).", C: "Immediately switch to a galactose-free (soy-based) formula.", D: "Begin intramuscular hydroxycobalamin injections.", E: "Continue breastfeeding and monitor liver function." },
+                correctAnswer: "C",
+                rationale: "Classical galactosemia is due to a deficiency of the GALT enzyme, which prevents the metabolism of galactose. Galactose is a component of lactose, the primary sugar in breast milk and standard infant formulas. Continued intake is acutely toxic, leading to liver failure, cataracts, and E. coli sepsis. The immediate life-saving intervention is the complete removal of all sources of galactose from the diet.",
+                source: "Source (Newborn Screening, Slide 13): 'NBS: Increased Gal / Gal1P & Absent GALT = STAT.' and 'You should immediately: 1) See baby, 2) Repeat Gal, Gal 1P & GALT & 3) Start Gal free formula'."
+            },
+            {
+                learningObjective: "LO4 (NBS): Review clinical presentations, disorders, diagnosis and treatment of selected disorders... in the State of Georgia Newborn Screening Panel.",
+                question: "A newborn screening test shows a significantly elevated phenylalanine level. If left untreated, phenylketonuria (PKU) leads to severe intellectual disability. The mainstay of treatment for PKU is which of the following?",
+                options: { A: "A high-protein diet", B: "A diet restricted in phenylalanine", C: "Administration of sapropterin (BH4 cofactor) as monotherapy", D: "Liver transplantation", E: "A galactose-free diet" },
+                correctAnswer: "B",
+                rationale: "PKU is caused by a deficiency of phenylalanine hydroxylase (PAH), the enzyme that converts phenylalanine to tyrosine. This leads to a toxic buildup of phenylalanine. The primary treatment is a strict lifelong diet that is low in protein and restricts phenylalanine intake to the minimum amount required for growth.",
+                source: "Source (Newborn Screening, Slide 8): 'Rx: Low Protein diet,' and 'Phe free diet if >360 µM'."
+            },
+            {
+                learningObjective: "LO4 (NBS): Review clinical presentations, disorders, diagnosis and treatment of selected disorders... in the State of Georgia Newborn Screening Panel.",
+                question: "A 2-week-old infant presents with poor feeding, vomiting, lethargy, and hypotonia. Lab work reveals metabolic acidosis and elevated plasma glycine. The newborn screen, which was delayed, is positive for methylmalonic acidemia. Treatment for some forms of this disorder involves providing large doses of a specific vitamin cofactor. Which vitamin is used?",
+                options: { A: "Niacin", B: "Thiamine", C: "Vitamin C", D: "Cobalamin (Vitamin B12)", E: "Biotin" },
+                correctAnswer: "D",
+                rationale: "Methylmalonic acidemia is caused by a defect in the enzyme methylmalonyl-CoA mutase or in the synthesis of its cofactor, adenosylcobalamin. Adenosylcobalamin is a metabolite of vitamin B12 (cobalamin). In cobalamin-responsive forms of the disease, providing high doses of intramuscular hydroxycobalamin (a form of B12) can overcome the metabolic block and is a key part of treatment.",
+                source: "Source (Newborn Screening, Slide 14): 'Rx Intramuscular Hydroxycobalamin'. The 'Cobalamin Metabolism' diagram also shows the central role of cobalamin (Cbl) in this pathway."
+            }
+        ];
+
+
+        const quizContainer = document.getElementById('quiz-container');
+        const themeToggleButton = document.getElementById('theme-toggle-button');
+        const bodyElement = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                bodyElement.classList.add('light-theme');
+                themeToggleButton.textContent = 'Switch to Dark Mode';
+            } else {
+                bodyElement.classList.remove('light-theme');
+                themeToggleButton.textContent = 'Switch to Light Mode';
+            }
+            localStorage.setItem('quizTheme', theme);
+        }
+
+        function loadQuiz() {
+            quizData.forEach((qData, index) => {
+                const questionBlock = document.createElement('div');
+                questionBlock.classList.add('question-block');
+                questionBlock.id = `q${index}`;
+
+                const loText = document.createElement('div');
+                loText.classList.add('learning-objective');
+                loText.textContent = qData.learningObjective;
+                questionBlock.appendChild(loText);
+
+                const questionText = document.createElement('p');
+                questionText.classList.add('question-text');
+                questionText.innerHTML = `${index + 1}. ${qData.question}`;
+                questionBlock.appendChild(questionText);
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('options');
+
+                for (const optionKey in qData.options) {
+                    const optionId = `q${index}_${optionKey}`;
+                    const label = document.createElement('label');
+                    label.htmlFor = optionId;
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.name = `q${index}`;
+                    radioInput.value = optionKey;
+                    radioInput.id = optionId;
+                    const labelText = document.createElement('span');
+                    labelText.textContent = ` ${optionKey}. ${qData.options[optionKey]}`;
+                    label.appendChild(radioInput);
+                    label.appendChild(labelText);
+                    optionsDiv.appendChild(label);
+                }
+                questionBlock.appendChild(optionsDiv);
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.classList.add('button-container');
+
+                const checkButton = document.createElement('button');
+                checkButton.textContent = 'Check Answer';
+                checkButton.classList.add('check-button');
+                checkButton.onclick = () => checkAnswer(index);
+                buttonContainer.appendChild(checkButton);
+                
+                questionBlock.appendChild(buttonContainer);
+
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.classList.add('feedback');
+                questionBlock.appendChild(feedbackDiv);
+
+                quizContainer.appendChild(questionBlock);
+            });
+        }
+
+        function checkAnswer(questionIndex) {
+            const questionBlockElement = document.getElementById(`q${questionIndex}`);
+            const selectedRadioButton = questionBlockElement.querySelector('input[type="radio"]:checked');
+
+            if (!selectedRadioButton) {
+                alert("Please select an answer first.");
+                return;
+            }
+
+            const selectedOptionKey = selectedRadioButton.value;
+            const qData = quizData[questionIndex];
+            const feedbackDiv = questionBlockElement.querySelector('.feedback');
+            const correct = selectedOptionKey === qData.correctAnswer;
+
+            let feedbackHTML = '';
+
+            if (correct) {
+                feedbackHTML = `<span class="feedback-status">Correct!</span>`;
+                feedbackDiv.className = 'feedback correct';
+            } else {
+                 feedbackHTML = `<span class="feedback-status">Incorrect.</span> The correct answer is ${qData.correctAnswer}.`;
+                feedbackDiv.className = 'feedback incorrect';
+            }
+
+            feedbackHTML += `<div class="feedback-rationale"><strong>Rationale:</strong> ${qData.rationale}</div>`;
+            feedbackHTML += `<div class="feedback-source">${qData.source}</div>`;
+            feedbackDiv.innerHTML = feedbackHTML;
+        }
+
+        themeToggleButton.addEventListener('click', () => {
+            if (bodyElement.classList.contains('light-theme')) {
+                applyTheme('dark');
+            } else {
+                applyTheme('light');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('quizTheme') || 'dark';
+            applyTheme(savedTheme);
+            loadQuiz();
+        });
+
+    </script>
+
+</body>
+</html>
